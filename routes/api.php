@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Auth\VerificationController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,18 @@ Route::group(
                 Route::post("register", "register");
                 Route::post("check", "check");
                 Route::post("logout", "logout")->middleware("auth:api");
+
+                Route::group(
+                    [
+                        "prefix" => "password",
+                        "controller" => ResetPasswordController::class,
+                    ],
+                    function () {
+                        Route::post("forget-email", "forgetPasswordByEmail");
+                        Route::post("forget-phone", "forgetPasswordByPhone");
+                        Route::post("reset", "resetPassword");
+                    }
+                );
 
                 Route::group(
                     [
@@ -51,8 +64,6 @@ Route::group(
                     function () {
                         Route::get("/", "show");
                         Route::match(["put", "patch"], "/", "update");
-                        Route::post("/change-email","changeEmail");
-                        Route::post("/change-phone","changePhone");
                         Route::post("/change-password","changePassword");
                     }
                 );

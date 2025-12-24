@@ -33,12 +33,5 @@ return [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
-    ],
-
-    'twilio' => [
-        'sid' => env('TWILIO_SID'),
-        'token' => env('TWILIO_TOKEN'),
-        'whatsapp_from' => env('TWILIO_WHATSAPP_FROM', 'whatsapp:+14155238886'),
-    ],
-
+    ]
 ];

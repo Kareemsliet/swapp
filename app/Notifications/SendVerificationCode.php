@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Channels\WhatsappChannel;
+use App\Channels\SmsChannel;
 use App\Models\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,7 +22,7 @@ class SendVerificationCode extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(Client $client, string $type, string $code)
+    public function __construct(Client $client, string $code, string $type)
     {
         $this->client = $client;
         $this->type = $type;
@@ -36,7 +36,7 @@ class SendVerificationCode extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return $this->type === 'phone' ? [WhatsappChannel::class] : ['mail'];
+        return $this->type === 'phone' ? [SmsChannel::class] : ['mail'];
     }
 
     /**
@@ -50,8 +50,12 @@ class SendVerificationCode extends Notification implements ShouldQueue
         ])->subject("رمز التحقق - SWAPP");
     }
 
-
-    public function toWhatsapp($notifiable): array
+    /**
+     * Get the array representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSms(object $notifiable): array
     {
         $message = "مرحباً *{$this->client->name}*\n\n";
         $message .= "رمز التحقق الخاص بك في *SWAPP* هو:\n\n";

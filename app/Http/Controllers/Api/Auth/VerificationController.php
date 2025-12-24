@@ -28,7 +28,7 @@ class VerificationController extends Controller
         $metaVerification = $this->client->generateVerificationMeta($type);
         $code = data_get($metaVerification, "{$type}.code");
 
-        $this->client->notify(new SendVerificationCode($this->client, $type, $code));
+        $this->client->notify(new SendVerificationCode($this->client, $code, $type));
         
         return successJsonResponse(__('auth.verification.verification_code_resent'));
     }
@@ -36,12 +36,13 @@ class VerificationController extends Controller
     public function verify(Request $request)
     {
         $request->validate([
-            "code" => "required|string|min:6",
+            "code" => "required|string",
         ]);
 
         $type = $request->route("type");
 
         $code = $this->client->getCodeVerification($type);
+
 
         if ($request->input("code") != $code || $this->client->isExpiredVerification($type)) {
             return errorJsonResponse(__('auth.verification.invalid_code'));

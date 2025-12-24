@@ -43,7 +43,7 @@ trait InteractsWithVerification
         return now()->greaterThan(Carbon::parse($this->getExpiresAtVerification($type)));
     }
 
-    public function generateVerificationMeta(string $type = 'email')
+    public function generateVerificationMeta(string $type = 'email'):array
     {
         $columnAt = "{$type}_verified_at";
 
@@ -52,7 +52,7 @@ trait InteractsWithVerification
             [
                 $type => [
                     "code" => str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT),
-                    "expires_at" => now()->addMinutes(config('auth.verification.expire', 10))->toDateTimeString(),
+                    "expires_at" => now()->addMinutes(10)->toDateTimeString(),
                 ],
             ]
         );

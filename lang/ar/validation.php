@@ -206,6 +206,7 @@ return [
         "phone_verified_code" => "رمز التحقق من الهاتف",
         "birthdate" => "تاريخ الميلاد",
         "phone" => "رقم الهاتف",
+        "code" => "الرمز",
         "summary" => "الملخص",
         "old_password" => "كلمة المرور القديمة",
         "country_code" => "رمز الدولة",

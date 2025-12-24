@@ -7,7 +7,6 @@ use App\Http\Requests\Api\ProfileUpdate;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -27,6 +26,16 @@ class ProfileController extends Controller
     {
         $data = $request->validated();
 
+        if($request->input('email'))
+        {
+            $data = $this->changeEmail($data);
+        }
+
+        if($request->input('phone'))
+        {
+            $data = $this->changePhone($data);
+        }
+
         $this->client->update($data);
 
         return successJsonResponse(
@@ -34,56 +43,43 @@ class ProfileController extends Controller
         );
     }
 
-    public function changeEmail(Request $request)
+    protected function changeEmail(array $data)
     {
-        $request->validate([
-            "email" => "required|string|email:filter|unique:clients,email,{$this->client->id}",
-        ]);
+        $newEmail = data_get($data, 'email');
 
-        $newEmail = $request->input("email");
-
-        if ($this->client->email === $newEmail) {
-            return successJsonResponse(__('general.response.no_changes'));
+        if($this->client->email == $newEmail)
+        {
+            return $data;
         }
-
-        $this->client->email = $newEmail;
-        $this->client->email_verified_at = null;
-        $this->client->save();
 
         $metaVerification = $this->client->generateVerificationMeta('email');
         $code = data_get($metaVerification, 'email.code');
 
-        $this->client->notify(new \App\Notifications\SendVerificationCode($this->client, 'email', $code));
+        $this->client->notify(new \App\Notifications\SendVerificationCode($this->client, $code, 'email'));
 
-        return successJsonResponse(__('auth.verification.code_sent'));
+        return array_merge($data, [
+            'email_verified_at' => null,
+            'email' => $newEmail,
+        ]);
     }
 
-    public function changePhone(Request $request)
+    protected function changePhone(array $data)
     {
-        $request->validate([
-            "phone" => "required|string|phone:country_code|unique:clients,phone,{$this->client->id}",
-            "country_code" => "required|string|size:2",
-        ]);
-
-        $phone = (string) new \Propaganistas\LaravelPhone\PhoneNumber(
-            $request->input("phone"),
-            strtoupper($request->input("country_code"))
-        );
+        $phone = data_get($data, 'phone');
 
         if ($this->client->phone === $phone) {
-            return successJsonResponse(__('general.response.success'));
+            return $data;
         }
-
-        $this->client->phone = $phone;
-        $this->client->phone_verified_at = null;
-        $this->client->save();
 
         $metaVerification = $this->client->generateVerificationMeta('phone');
         $code = data_get($metaVerification, 'phone.code');
 
-        $this->client->notify(new \App\Notifications\SendVerificationCode($this->client, 'phone', $code));
+        $this->client->notify(new \App\Notifications\SendVerificationCode($this->client, $code, 'phone'));
 
-        return successJsonResponse(__('auth.verification.code_sent'));
+        return array_merge($data, [
+            'phone_verified_at' => null,
+            'phone' => $phone,
+        ]);
     }
 
     public function changePassword(Request $request)

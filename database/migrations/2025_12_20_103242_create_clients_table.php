@@ -20,6 +20,7 @@ return new class extends Migration
             $table->longText("summary")->nullable();
             $table->timestamp("email_verified_at")->nullable();
             $table->timestamp("phone_verified_at")->nullable();
+            $table->text("password_reset_meta")->nullable();
             $table->text("verified_meta")->nullable();
             $table->string("password");
             $table->timestamps();

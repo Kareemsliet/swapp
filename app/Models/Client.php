@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\ClientRegistered;
+use App\Traits\InteractsWithResetPassword;
 use App\Traits\InteractsWithVerification;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +13,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Client extends Authenticatable implements JWTSubject
 {
-    use InteractsWithVerification, Notifiable;
+    use InteractsWithVerification,InteractsWithResetPassword,Notifiable;
     
     protected $table = 'clients';
 
@@ -25,12 +26,14 @@ class Client extends Authenticatable implements JWTSubject
         "email_verified_at",
         "phone_verified_at",
         "verified_meta",
+        "password_reset_meta",
         "password",
     ];
 
     protected $hidden = [
         "password",
         "verified_meta",
+        "password_reset_meta",
     ];
 
     protected function casts()
@@ -41,6 +44,7 @@ class Client extends Authenticatable implements JWTSubject
             "email_verified_at" => "datetime",
             "phone_verified_at" => "datetime",
             "verified_meta" => "encrypted:array",
+            "password_reset_meta" => "encrypted:array",
         ];
     }
 

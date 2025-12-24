@@ -26,7 +26,7 @@ class registerClient
                 return;
             }
 
-            $client->notify(new SendVerificationCode($client, $preferredContactMethod, $code));
+            $client->notify(new SendVerificationCode($client, $code, $preferredContactMethod));
 
         }
     }
