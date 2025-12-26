@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Auth\SocialAuthController;
 use App\Http\Controllers\Api\Auth\VerificationController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,15 @@ Route::group(
                 Route::post("login", "login");
                 Route::post("register", "register");
                 Route::post("check", "check");
-                Route::post("logout", "logout")->middleware("auth:api");
+
+                Route::group(
+                    [
+                        "prefix" => "social",
+                        "controller" => SocialAuthController::class,
+                    ],function(){
+                        Route::post("{provider}/callback", "handleProviderCallback")->whereIn("provider", ["google"]);
+                    }
+                );
 
                 Route::group(
                     [
@@ -48,6 +57,7 @@ Route::group(
                     }
                 );
 
+                Route::post("logout", "logout")->middleware("auth:api");
             }
         );
 

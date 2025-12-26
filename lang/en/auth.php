@@ -27,6 +27,7 @@ return [
         "invalid_code" => "Invalid password reset code.",
         "missing" => "Password reset method is missing.",
     ],
+    "invalid_token" => "Invalid access token.",
     "registered" => "Account registered successfully.",
     "login" => "Logged in successfully.",
     "logout" => "Logged out successfully.",

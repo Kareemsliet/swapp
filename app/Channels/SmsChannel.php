@@ -27,9 +27,9 @@ class SmsChannel
         $this->handle($phone, $body);
     }
 
-    protected function handle(string $phone, string $body): void
-    {
-        // implement your SMS sending logic here.
+    protected function handle(string $phone, string $message): void
+    {    
+        // implement your SMS sending logic here, for example using an external API
     }
 }
 

@@ -75,6 +75,11 @@ class Client extends Authenticatable implements JWTSubject
         return $emailValid && $phoneValid && $atLeastOneVerified;
     }
 
+    public function providers()
+    {
+        return $this->hasMany(ClientProvider::class,"client_id");
+    }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

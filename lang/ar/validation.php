@@ -207,6 +207,7 @@ return [
         "birthdate" => "تاريخ الميلاد",
         "phone" => "رقم الهاتف",
         "code" => "الرمز",
+        "access_token" => "رمز الوصول",
         "summary" => "الملخص",
         "old_password" => "كلمة المرور القديمة",
         "country_code" => "رمز الدولة",
