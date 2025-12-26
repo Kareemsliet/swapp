@@ -85,7 +85,6 @@ class ProfileController extends Controller
     public function changePassword(Request $request)
     {
         $request->validate([
-            "old_password" => "required|string|current_password:api",
             "password" => "required|string|confirmed|min:8|different:old_password",
         ]);
 
@@ -94,5 +93,4 @@ class ProfileController extends Controller
 
         return successJsonResponse(__('general.response.success'));
     }
-
 }
