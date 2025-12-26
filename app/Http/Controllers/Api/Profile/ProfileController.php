@@ -85,7 +85,7 @@ class ProfileController extends Controller
     public function changePassword(Request $request)
     {
         $request->validate([
-            "password" => "required|string|confirmed|min:8|different:old_password",
+            "password" => "required|string|confirmed|min:8",
         ]);
 
         $this->client->password = $request->input("password");
